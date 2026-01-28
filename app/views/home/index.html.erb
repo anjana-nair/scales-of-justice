@@ -1,0 +1,89 @@
+<% if @presenter.legal_issues.any? %>
+  <div class="search-form">
+    <h1>Indian Legal Sections Search</h1>
+    <%= form_tag root_path, method: :get do %>
+      <%= hidden_field_tag :branch, params[:branch] if params[:branch].present? %>
+      <%= text_field_tag :query, params[:query], placeholder: "Enter legal issue name" %>
+      <%= submit_tag "Search" %>
+    <% end %>
+  </div>
+  <div class="results">
+    <% if @presenter.legal_issues.any? %>
+      <% @presenter.legal_issues.each do |legal_issue| %>
+        <h2><%= legal_issue.name %></h2>
+        <p><%= legal_issue.description %></p>
+        <h3>Related Sections:</h3>
+        <ul>
+          <% legal_issue.sections.each do |section| %>
+            <li><%= section.act.short_name %> Section <%= section.number %>: <%= section.description %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+      <p>No legal issues found.</p>
+    <% end %>
+  </div>
+<% elsif @presenter.acts_sections.any? %>
+  <div class="branch-view">
+    <h1><%= params[:branch].capitalize %> Law Sections</h1>
+    <p>Here are all the sections in the statutes related to <%= params[:branch] %> law.</p>
+    <%= link_to "Back to Home", root_path, class: "back-link" %>
+    <div class="search-form" style="margin-top: 20px;">
+      <%= form_tag root_path, method: :get do %>
+        <%= hidden_field_tag :branch, params[:branch] %>
+        <%= text_field_tag :query, nil, placeholder: "Search within #{params[:branch]} issues" %>
+        <%= submit_tag "Search" %>
+      <% end %>
+    </div>
+    <% if @presenter.acts_sections.any? %>
+      <% @presenter.acts_sections.each do |act, sections| %>
+        <h2><%= act.name %> (<%= act.short_name %>)</h2>
+        <ul>
+          <% sections.each do |section| %>
+            <li><strong>Section <%= section.number %>:</strong> <%= section.description %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+      <p>No sections found for this branch.</p>
+    <% end %>
+  </div>
+<% else %>
+  <div class="landing">
+    <div class="header">
+      <div class="justice-icon">
+        ⚖️
+      </div>
+      <h1>Scales of Justice</h1>
+      <div class="subtitle">Indian Legal Sections Navigator</div>
+      <p>Dive deep into the statutes and sections that shape India's legal landscape. From criminal offenses to civil contracts, discover the laws that govern our society.</p>
+    </div>
+    <div class="main-content">
+      <div class="branches">
+        <a href="?branch=criminal" class="branch-card">
+          <h3>⚖️ Criminal Law</h3>
+          <p>Explore offenses under the Indian Penal Code, from murder to theft.</p>
+        </a>
+        <a href="?branch=civil" class="branch-card">
+          <h3>📜 Civil Law</h3>
+          <p>Contracts, property transfers, and evidence rules for civil matters.</p>
+        </a>
+        <a href="?branch=family" class="branch-card">
+          <h3>👨‍👩‍👧 Family Law</h3>
+          <p>Marriage, divorce, and family relations under Hindu laws.</p>
+        </a>
+        <a href="?branch=constitutional" class="branch-card">
+          <h3>🇮🇳 Constitutional Law</h3>
+          <p>Fundamental rights and the framework of India's Constitution.</p>
+        </a>
+        <a href="?branch=tort" class="branch-card">
+          <h3>🚗 Tort Law</h3>
+          <p>Negligence, damages, and liability in personal injury cases.</p>
+        </a>
+      </div>
+    </div>
+    <div class="footer">
+      <p>Empowering legal professionals with comprehensive Indian law resources.</p>
+    </div>
+  </div>
+<% end %>
