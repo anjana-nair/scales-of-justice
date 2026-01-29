@@ -3,7 +3,7 @@
     <h1>Indian Legal Sections Search</h1>
     <%= form_tag root_path, method: :get do %>
       <%= hidden_field_tag :branch, params[:branch] if params[:branch].present? %>
-      <%= text_field_tag :query, params[:query], placeholder: "Enter legal issue name" %>
+      <%= text_field_tag :query, params[:query], placeholder: "Enter legal issue name", autocomplete: "off" %>
       <%= submit_tag "Search" %>
     <% end %>
   </div>
@@ -31,7 +31,7 @@
     <div class="search-form" style="margin-top: 20px;">
       <%= form_tag root_path, method: :get do %>
         <%= hidden_field_tag :branch, params[:branch] %>
-        <%= text_field_tag :query, nil, placeholder: "Search within #{params[:branch]} issues" %>
+        <%= text_field_tag :query, nil, placeholder: "Search within #{params[:branch]} issues", autocomplete: "off" %>
         <%= submit_tag "Search" %>
       <% end %>
     </div>
@@ -57,6 +57,12 @@
       <h1>Scales of Justice</h1>
       <div class="subtitle">Indian Legal Sections Navigator</div>
       <p>Dive deep into the statutes and sections that shape India's legal landscape. From criminal offenses to civil contracts, discover the laws that govern our society.</p>
+      <div class="search-form">
+        <%= form_tag root_path, method: :get do %>
+          <%= text_field_tag :query, params[:query], placeholder: "Search across all legal issues", autocomplete: "off" %>
+          <%= submit_tag "Search" %>
+        <% end %>
+      </div>
     </div>
     <div class="main-content">
       <div class="branches">
@@ -86,4 +92,9 @@
       <p>Empowering legal professionals with comprehensive Indian law resources.</p>
     </div>
   </div>
+<% end %>
+<% if @presenter.meaningless_query? %>
+  <script>
+    alert("Please enter meaningful words or section numbers for search.");
+  </script>
 <% end %>

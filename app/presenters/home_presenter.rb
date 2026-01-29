@@ -3,6 +3,19 @@ class HomePresenter
     @params = params
   end
 
+  def meaningless_query?
+    return false unless @params[:query].present?
+
+    query = @params[:query].downcase.strip
+    return true if query.length < 2
+
+    meaningless_words = ["a", "an", "the", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "do", "does", "did", "will", "would", "can", "could", "should", "may", "might", "must", "shall", "and", "or", "but", "if", "then", "else", "when", "where", "how", "why", "what", "who", "test", "hello", "hi", "ok", "yes", "no", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+    words = query.split(/\s+/)
+    return true if words.all? { |w| meaningless_words.include?(w) }
+
+    false
+  end
+
   def acts_sections
     return @acts_sections if @acts_sections
 
